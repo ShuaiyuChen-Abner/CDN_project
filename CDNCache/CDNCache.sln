@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNCache", "CDNCache.csproj", "{FD76768F-65B0-4BD7-95C7-324590887094}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD76768F-65B0-4BD7-95C7-324590887094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD76768F-65B0-4BD7-95C7-324590887094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD76768F-65B0-4BD7-95C7-324590887094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD76768F-65B0-4BD7-95C7-324590887094}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83D55322-A388-4F12-9867-9C461C1CF96B}
+	EndGlobalSection
+EndGlobal
