@@ -16,6 +16,7 @@ namespace CDNClient
 
         public Form1()
         {
+
             InitializeComponent();
 
 
@@ -49,13 +50,14 @@ namespace CDNClient
                 if (fileB64 != null)
                 {
                     pictureBox1.Image = null;
+                   
                     byte[] buff = Convert.FromBase64String(fileB64);
-                    string picname = Guid.NewGuid().ToString().Replace("-", "") + ".png";
-                    File.WriteAllBytes(picname, buff);
-                    Bitmap bm = new Bitmap(picname);
+                    MemoryStream ms = new MemoryStream(buff);
+                    Bitmap bm = new Bitmap(ms);
                     pictureBox1.Image = bm;
-                }
 
+                }
+                
             }
         }
 

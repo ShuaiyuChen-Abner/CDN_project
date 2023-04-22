@@ -101,6 +101,7 @@ namespace CDNCache
 response: {2:0.0}% of file {0} was constructed with the cached data" + Environment.NewLine, fileName, DateTime.Now, cacheMatchCount * 100.0 / fragmentIndex);
 
                 return Convert.ToBase64String(buffer.ToArray());//make the byte data into base64 string so as to send it back to the client
+                
             }
             return "Hello!";
         }

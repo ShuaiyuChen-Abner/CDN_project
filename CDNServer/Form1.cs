@@ -4,6 +4,8 @@ using System.Text;
 using System.Security.Cryptography;
 
 using CDNHw;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace CDNServer
 {
     public partial class Form1 : Form
@@ -34,7 +36,7 @@ namespace CDNServer
             {
                 listBox1.Items.Add(fileInfo.Name);
             }
-            // make md5 digest for per 2KB data
+            // make md5 digest for file fragment.
             foreach (FileInfo fileInfo in GetAllServerFileNames())
             {
 
@@ -110,7 +112,7 @@ namespace CDNServer
                 }
                 FileCache.Add(fileInfo.Name, fileStruct);
 
-                /*
+                /* fited fragment funtion
                                 for (int i = 0; i < data.Length; i += 2048)
                                 {
                                     byte[] buffer = new byte[data.Length - i > 2048 ? 2048 : data.Length - i];
@@ -159,6 +161,82 @@ namespace CDNServer
                 FileInfo fileInfo = GetFileInfoByFileName(fileName);
                 if (fileInfo != null)
                 {
+                    if (!FileCache.ContainsKey(fileInfo.Name))
+                    {
+
+                        List<string> fileStruct = new List<string>();
+                        byte[] data = File.ReadAllBytes(fileInfo.FullName);
+
+                        MD5 md5 = MD5.Create();
+                        int window = 16;
+                        byte[] buffer = new byte[window];
+                        int frangment_start = 0;
+                        byte[] md5_hash = new byte[16];
+
+                        // split file into fragments by rabin function
+                        for (int i = window - 1; i < data.Length; i++)
+                        {
+                            Array.Copy(data, i + 1 - window, buffer, 0, window);
+                            md5_hash = md5.ComputeHash(buffer);
+                            //取前八位转换为十进制
+                            long md5DecimalValue = BitConverter.ToInt64(md5_hash, 0);
+
+                            if ((Math.Abs(md5DecimalValue) % 2048 == 369))
+                            {
+
+                                //fragmen_start 到 i分块成功，应该计算md5，放到fileStruct中。
+                                byte[] fragment = new byte[i - frangment_start + 1];
+                                Array.Copy(data, frangment_start, fragment, 0, i - frangment_start + 1);
+                                string digest = MD5Str.md5(fragment);
+                                fileStruct.Add(digest);
+                                if (!FragmentCache.ContainsKey(digest))
+                                {
+                                    FragmentCache.Add(digest, fragment);
+                                }
+                                frangment_start = i + 1;
+                                if (i + window > data.Length)
+                                {
+                                    fragment = new byte[data.Length - frangment_start];
+                                    Array.Copy(data, frangment_start, fragment, 0, data.Length - frangment_start);
+
+                                    digest = MD5Str.md5(fragment);
+                                    fileStruct.Add(digest);
+                                    if (!FragmentCache.ContainsKey(digest))
+                                    {
+                                        FragmentCache.Add(digest, fragment);
+                                    }
+                                }
+                                else
+                                {
+                                    i += window;
+                                }
+                            }
+                            else
+                            {
+                                if (i + 1 == data.Length)
+                                {
+                                    //说明此时下一块就到文件最后一个字节，则直接从最后一个装到fragment——start
+                                    byte[] fragment = new byte[data.Length - frangment_start];
+                                    Array.Copy(data, frangment_start, fragment, 0, data.Length - frangment_start);
+
+                                    string digest = MD5Str.md5(fragment);
+                                    fileStruct.Add(digest);
+                                    if (!FragmentCache.ContainsKey(digest))
+                                    {
+                                        FragmentCache.Add(digest, fragment);
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+
+                        }
+                        FileCache.Add(fileInfo.Name, fileStruct);
+                    }
+
                     return string.Join(Environment.NewLine, FileCache[fileName]); //return digests
                 }
             }
@@ -170,6 +248,7 @@ namespace CDNServer
                 FileInfo fileInfo = GetFileInfoByFileName(fileName);
                 if (fileInfo != null)
                 {
+
                     //return file fragment by fragment md5
 
                     byte[] Fragment = FragmentCache[digest];
