@@ -110,21 +110,21 @@ namespace CDNServer
                 }
                 FileCache.Add(fileInfo.Name, fileStruct);
 
-/*
-                for (int i = 0; i < data.Length; i += 2048)
-                {
-                    byte[] buffer = new byte[data.Length - i > 2048 ? 2048 : data.Length - i];
-                    Array.Copy(data, i, buffer, 0, buffer.Length);
-                    string digest = MD5Str.md5(buffer);
-                    fileStruct.Add(digest);
-                    // store file fragment in memory
-                    if (!FragmentCache.ContainsKey(digest))
-                    {
-                        FragmentCache.Add(digest, buffer);
-                    }
+                /*
+                                for (int i = 0; i < data.Length; i += 2048)
+                                {
+                                    byte[] buffer = new byte[data.Length - i > 2048 ? 2048 : data.Length - i];
+                                    Array.Copy(data, i, buffer, 0, buffer.Length);
+                                    string digest = MD5Str.md5(buffer);
+                                    fileStruct.Add(digest);
+                                    // store file fragment in memory
+                                    if (!FragmentCache.ContainsKey(digest))
+                                    {
+                                        FragmentCache.Add(digest, buffer);
+                                    }
 
-                }
-                FileCache.Add(fileInfo.Name, fileStruct);*/
+                                }
+                                FileCache.Add(fileInfo.Name, fileStruct);*/
             }
 
 

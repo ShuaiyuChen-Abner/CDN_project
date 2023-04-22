@@ -13,8 +13,8 @@ namespace CDNCache
         TCPHelper tcp = new TCPHelper();
         MD5 md5 = MD5.Create();
 
-        Dictionary<string,List<string>> FileCache= new Dictionary<string,List<string>>();
-        Dictionary<string,string> FileCacheLog=new Dictionary<string, string> ();
+        Dictionary<string, List<string>> FileCache = new Dictionary<string, List<string>>();
+        Dictionary<string, string> FileCacheLog = new Dictionary<string, string>();
         Dictionary<string, byte[]> FragmentCache = new Dictionary<string, byte[]>();
 
         public Form1()
@@ -71,7 +71,7 @@ namespace CDNCache
                 string fileName = request.Substring(3);
                 if (!FileCache.ContainsKey(fileName))
                 {
-                    string fileStructRaw = tcp.SendRequest("ST:"+fileName,serverIP, serverPort);
+                    string fileStructRaw = tcp.SendRequest("ST:" + fileName, serverIP, serverPort);
                     FileCache[fileName] = new List<string>(fileStructRaw.Split(new string[] { Environment.NewLine }, StringSplitOptions.None));
                 } //get the file structure in md5 lines
                 int fragmentIndex = 0;
@@ -79,7 +79,7 @@ namespace CDNCache
 
                 List<byte> buffer = new List<byte>();
 
-                foreach(string digest in FileCache[fileName])
+                foreach (string digest in FileCache[fileName])
                 {
                     if (!FragmentCache.ContainsKey(digest))
                     {
@@ -113,7 +113,7 @@ response: {2:0.0}% of file {0} was constructed with the cached data" + Environme
             RefreshData();
         }
 
-        
+
 
         private void lstFiles_MouseDoubleClick(object sender, MouseEventArgs e)
         {

@@ -83,7 +83,7 @@
             Controls.Add(label1);
             Margin = new Padding(2, 3, 2, 3);
             Name = "Form1";
-            Text = "Form1";
+            Text = "CDNServer";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
