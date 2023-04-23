@@ -24,7 +24,7 @@ namespace CDNHw
         }
         public TCPHelper() { }
 
-        //when the app wants to be a server， it should run the InitListner method 
+        //when the componet wants to be a server， it should run the InitListner method 
         public void InitListener()
         {
             //regular process for TCP port listening

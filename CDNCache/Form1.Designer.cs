@@ -42,7 +42,7 @@
             // 
             lstFiles.FormattingEnabled = true;
             lstFiles.ItemHeight = 17;
-            lstFiles.Location = new Point(292, 36);
+            lstFiles.Location = new Point(316, 36);
             lstFiles.Margin = new Padding(2, 3, 2, 3);
             lstFiles.Name = "lstFiles";
             lstFiles.Size = new Size(275, 565);
@@ -51,7 +51,7 @@
             // 
             // txtLog
             // 
-            txtLog.Location = new Point(575, 37);
+            txtLog.Location = new Point(609, 37);
             txtLog.Margin = new Padding(2, 3, 2, 3);
             txtLog.Multiline = true;
             txtLog.Name = "txtLog";
@@ -65,7 +65,7 @@
             lstCache.Location = new Point(9, 36);
             lstCache.Margin = new Padding(2, 3, 2, 3);
             lstCache.Name = "lstCache";
-            lstCache.Size = new Size(268, 565);
+            lstCache.Size = new Size(303, 565);
             lstCache.TabIndex = 3;
             // 
             // label1
@@ -81,7 +81,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(292, 16);
+            label2.Location = new Point(316, 14);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(27, 17);
@@ -91,7 +91,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(575, 16);
+            label3.Location = new Point(609, 14);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
             label3.Size = new Size(73, 17);
@@ -119,7 +119,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(820, 605);
+            ClientSize = new Size(893, 608);
             Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(label2);

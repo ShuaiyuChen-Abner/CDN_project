@@ -1,18 +1,24 @@
 using CDNHw;
 using System.Buffers.Text;
+using System.Collections;
 using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 
 namespace CDNCache
 {
     public partial class Form1 : Form
     {
+        // ip and port point to the server
         public string serverIP = "127.0.0.1";
         public int serverPort = 8090;
 
+        // create the tcp and md5 object 
         TCPHelper tcp = new TCPHelper();
         MD5 md5 = MD5.Create();
 
+
+        //three dictionary to store the file(md5 digest as value),fragment(fragment contant as value) and the log information
         Dictionary<string, List<string>> FileCache = new Dictionary<string, List<string>>();
         Dictionary<string, string> FileCacheLog = new Dictionary<string, string>();
         Dictionary<string, byte[]> FragmentCache = new Dictionary<string, byte[]>();
@@ -24,7 +30,10 @@ namespace CDNCache
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //launch the InitListener to bind this componet to the ip and port as setting(cache:8091 server:8090)
             tcp.InitListener();
+
+            //start another thread to process the request
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -32,18 +41,19 @@ namespace CDNCache
         {
             while (true)
             {
-                //?
+
                 tcp.AcceptLoop(ProcessRequest);
-                backgroundWorker1.ReportProgress(0);//refresh the listbox after an acceptance
+                backgroundWorker1.ReportProgress(0);
             }
         }
-        //?
+        //refresh the listbox after an acceptance
         private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             RefreshData();
 
         }
 
+        //when the request is processed,refresh the contant in this two box
         public void RefreshData()
         {
             lstCache.Items.Clear();
@@ -55,10 +65,16 @@ namespace CDNCache
             }
             foreach (string digest in FragmentCache.Keys)
             {
-                lstCache.Items.Add(digest);
+                StringBuilder fragmentcontant = new StringBuilder(FragmentCache[digest].Length * 2);
+                foreach (byte i in FragmentCache[digest])
+                {
+                    fragmentcontant.AppendFormat("{0:x2}", i);
+                }
+                lstCache.Items.Add(fragmentcontant.ToString().ToUpper());
             }
         }
 
+        //  forward the request to the server according to the request kind.
         private string ProcessRequest(string request)
         {
             if (request == "LS")
@@ -81,6 +97,7 @@ namespace CDNCache
 
                 foreach (string digest in FileCache[fileName])
                 {
+                    //if the fragmentcache doesn't contain the fragment ,send server a request to get that fragment
                     if (!FragmentCache.ContainsKey(digest))
                     {
                         string fragmentB64 = tcp.SendRequest("FR:" + fileName + ":" + digest, serverIP, serverPort); //get the fragment data from the server
@@ -93,6 +110,7 @@ namespace CDNCache
                     buffer.AddRange(FragmentCache[digest]);
                     fragmentIndex++;
                 }
+                //set a log for this file 
                 if (!FileCacheLog.ContainsKey(fileName))
                 {
                     FileCacheLog[fileName] = "";
@@ -101,7 +119,7 @@ namespace CDNCache
 response: {2:0.0}% of file {0} was constructed with the cached data" + Environment.NewLine, fileName, DateTime.Now, cacheMatchCount * 100.0 / fragmentIndex);
 
                 return Convert.ToBase64String(buffer.ToArray());//make the byte data into base64 string so as to send it back to the client
-                
+
             }
             return "Hello!";
         }

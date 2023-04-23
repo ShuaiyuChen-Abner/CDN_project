@@ -6,6 +6,7 @@ namespace CDNClient
 {
     public partial class Form1 : Form
     {
+        //client should only connect to the cache side
         public string serverIP = "127.0.0.1";
         public int serverPort = 8091;
 
@@ -29,6 +30,7 @@ namespace CDNClient
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //send ST request to get all files on server
             string resp = tcp.SendRequest("LS", serverIP, serverPort);
             if (resp != null)
             {
@@ -45,6 +47,7 @@ namespace CDNClient
         {
             if (listBox1.SelectedIndex >= 0)
             {
+                //show the selected picture as bimap
                 string fileName = listBox1.SelectedItem.ToString();
                 string fileB64 = tcp.SendRequest("DL:" + fileName, serverIP, serverPort);
                 if (fileB64 != null)

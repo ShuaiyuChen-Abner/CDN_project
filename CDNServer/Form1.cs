@@ -26,16 +26,19 @@ namespace CDNServer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //create a new dir to store the file on server
             if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "/serverFiles"))
             {
                 Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "/serverFiles");
             }
+            //store the basic dir to find the file
             baseDir = AppDomain.CurrentDomain.BaseDirectory + "/serverFiles";
             listBox1.Items.Clear();
             foreach (FileInfo fileInfo in GetAllServerFileNames())
             {
                 listBox1.Items.Add(fileInfo.Name);
             }
+            //when the server initiated,split the file  and store in the filecache and fragmentcache
             // make md5 digest for file fragment.
             foreach (FileInfo fileInfo in GetAllServerFileNames())
             {
@@ -112,21 +115,7 @@ namespace CDNServer
                 }
                 FileCache.Add(fileInfo.Name, fileStruct);
 
-                /* fited fragment funtion
-                                for (int i = 0; i < data.Length; i += 2048)
-                                {
-                                    byte[] buffer = new byte[data.Length - i > 2048 ? 2048 : data.Length - i];
-                                    Array.Copy(data, i, buffer, 0, buffer.Length);
-                                    string digest = MD5Str.md5(buffer);
-                                    fileStruct.Add(digest);
-                                    // store file fragment in memory
-                                    if (!FragmentCache.ContainsKey(digest))
-                                    {
-                                        FragmentCache.Add(digest, buffer);
-                                    }
 
-                                }
-                                FileCache.Add(fileInfo.Name, fileStruct);*/
             }
 
 
@@ -161,6 +150,7 @@ namespace CDNServer
                 FileInfo fileInfo = GetFileInfoByFileName(fileName);
                 if (fileInfo != null)
                 {
+                    // if a file is uploaded on the server after the server initiated,split the file  and store in the filecache and fragmentcache
                     if (!FileCache.ContainsKey(fileInfo.Name))
                     {
 
@@ -260,11 +250,8 @@ namespace CDNServer
 
             return "Error!";
         }
-        /// <summary>
-        /// get file info
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+
+        //get file with selected name
         public FileInfo GetFileInfoByFileName(string fileName)
         {
             var fileInfoLst = GetAllServerFileNames();
@@ -276,10 +263,8 @@ namespace CDNServer
             return null;
 
         }
-        /// <summary>
-        /// get all files' info from the server dir
-        /// </summary>
-        /// <returns></returns>
+
+        //get all file on server
         public List<FileInfo> GetAllServerFileNames()
         {
             List<FileInfo> result = new List<FileInfo>();
@@ -293,7 +278,7 @@ namespace CDNServer
 
 
 
-
+        //compute the md5 for fragment
         public class MD5Str
         {
             public static string md5(byte[] buffer)
@@ -302,7 +287,7 @@ namespace CDNServer
                 try
                 {
 
-                    var check = MD5.Create();
+                    MD5 check = MD5.Create();
                     byte[] somme = check.ComputeHash(buffer);
                     string ret = "";
                     foreach (byte a in somme)
@@ -321,11 +306,7 @@ namespace CDNServer
             }
         }
 
-        /// <summary>
-        /// allow administrator to choose file and place it into server dir
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        //add a new file to server
         private void button2_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
